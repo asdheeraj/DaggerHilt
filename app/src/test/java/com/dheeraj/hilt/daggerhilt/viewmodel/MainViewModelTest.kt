@@ -57,10 +57,10 @@ class MainViewModelTest {
     fun getBlogs_200ReturnedFromServer_successReturned() {
         testCoroutineRule.runBlockingTest {
             success()
-            mainViewModel.getBlogs().observeForever(blogApiObserver)
-            verify(blogRepo, times(1)).getBlogs()
+            mainViewModel.getBlogs(true).observeForever(blogApiObserver)
+            verify(blogRepo, times(1)).getBlogs(true)
             verify(blogApiObserver).onChanged(Resource.success(data = emptyList()))
-            mainViewModel.getBlogs().removeObserver(blogApiObserver)
+            mainViewModel.getBlogs(true).removeObserver(blogApiObserver)
         }
     }
 
@@ -68,21 +68,21 @@ class MainViewModelTest {
     fun getBlogs_ErrorFromServer_errorReturned() {
         testCoroutineRule.runBlockingTest {
             failure()
-            mainViewModel.getBlogs().observeForever(blogApiObserver)
-            verify(blogRepo, times(1)).getBlogs()
+            mainViewModel.getBlogs(true).observeForever(blogApiObserver)
+            verify(blogRepo, times(1)).getBlogs(true)
             verify(blogApiObserver).onChanged(Resource.error(data = null, message = "Error"))
-            mainViewModel.getBlogs().removeObserver(blogApiObserver)
+            mainViewModel.getBlogs(true).removeObserver(blogApiObserver)
         }
     }
 
     // region Helper Methods
 
     private suspend fun success() {
-        doReturn(emptyList<Blog>()).`when`(blogRepo).getBlogs()
+        doReturn(emptyList<Blog>()).`when`(blogRepo).getBlogs(true)
     }
 
     private suspend fun failure() {
-        doThrow(RuntimeException("Error")).`when`(blogRepo).getBlogs()
+        doThrow(RuntimeException("Error")).`when`(blogRepo).getBlogs(true)
     }
 
     // endregion Helper Methods
