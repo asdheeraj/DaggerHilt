@@ -40,16 +40,15 @@ class BlogRepoImplTest {
     @Test
      fun getBlogs_success_200returned() {
         testCoroutineRule.runBlockingTest {
-            success()
-            val blogs = blogRepo.getBlogs(true)
-            assertTrue(blogs.isEmpty())
+            `when`(blogDao.getBlogs()).thenReturn(emptyList())
+             blogRepo.getBlogs(true)
+             verify(blogApi, times(1)).getBlogs()
         }
     }
 
     @Test
     fun getBlogs_failure_exceptionThrown() {
         testCoroutineRule.runBlockingTest {
-            success()
             try {
                 blogRepo.getBlogs(false)
             } catch (e: Exception) {
@@ -57,10 +56,4 @@ class BlogRepoImplTest {
             }
         }
     }
-
-    private suspend fun success() {
-        `when`(blogApi.getBlogs()).thenReturn(emptyList())
-        `when`(blogDao.getBlogs()).thenReturn(emptyList())
-    }
-
 }

@@ -28,6 +28,6 @@ class MainActivityTest {
     @Test
     fun test_activity_inView() {
         val activityScenario = ActivityScenario.launch(MainActivity::class.java)
-        onView(withId(R.id.main)).check(matches(withText("Check")))
+        onView(withId(R.id.main)).check(matches(isDisplayed()))
     }
 }

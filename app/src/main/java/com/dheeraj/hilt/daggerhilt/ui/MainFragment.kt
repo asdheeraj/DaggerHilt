@@ -17,6 +17,8 @@ import com.dheeraj.hilt.daggerhilt.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
 
+
+
 @AndroidEntryPoint
 class MainFragment
 constructor(
@@ -29,6 +31,7 @@ constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG,  "Constructor Injection Working! $someString")
         initObservers()
     }
 
@@ -84,7 +87,6 @@ constructor(
                 }
             }
         }
-
         return result
     }
 
