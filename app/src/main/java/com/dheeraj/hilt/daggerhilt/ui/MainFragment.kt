@@ -70,7 +70,7 @@ constructor(
         })
     }
 
-    fun setUpUI(blogs: ArrayList<Blog>) {
+    private fun setUpUI(blogs: ArrayList<Blog>) {
         blogAdapter.apply {
             setBlogs(blogs)
             notifyDataSetChanged()
