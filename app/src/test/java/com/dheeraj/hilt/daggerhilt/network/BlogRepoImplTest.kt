@@ -4,6 +4,7 @@ import android.accounts.NetworkErrorException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.dheeraj.hilt.daggerhilt.cache.BlogDao
 import com.dheeraj.hilt.daggerhilt.util.TestCoroutineRule
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert
 import org.junit.Assert.*
@@ -53,7 +54,7 @@ class BlogRepoImplTest {
             try {
                 blogRepo.getBlogs(false)
             } catch (e: Exception) {
-                assertTrue(e is NetworkErrorException)
+                assertTrue(e is CancellationException)
             }
         }
     }

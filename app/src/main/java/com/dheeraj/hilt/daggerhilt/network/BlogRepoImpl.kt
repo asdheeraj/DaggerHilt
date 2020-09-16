@@ -1,8 +1,8 @@
 package com.dheeraj.hilt.daggerhilt.network
 
-import android.accounts.NetworkErrorException
 import com.dheeraj.hilt.daggerhilt.cache.BlogDao
 import com.dheeraj.hilt.daggerhilt.model.Blog
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 class BlogRepoImpl
@@ -12,7 +12,7 @@ class BlogRepoImpl
 ) : BlogRepo {
     override suspend fun getBlogs(isInternetAvailable: Boolean): List<Blog> {
         if (blogDao.getBlogs().isEmpty()) {
-            if (isInternetAvailable) blogDao.insertAll(blogApi.getBlogs()) else throw NetworkErrorException()
+            if (isInternetAvailable) blogDao.insertAll(blogApi.getBlogs()) else throw CancellationException("No Network Detected")
         }
         return blogDao.getBlogs()
     }

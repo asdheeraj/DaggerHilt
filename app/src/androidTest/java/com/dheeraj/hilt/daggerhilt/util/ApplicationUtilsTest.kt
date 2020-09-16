@@ -3,8 +3,7 @@ package com.dheeraj.hilt.daggerhilt.util
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +27,7 @@ class ApplicationUtilsTest {
 
     @Test
     fun test_isInternetAvailable() {
-        //This function changes to true or false based on the device internet connection availability
+        //This function changes to true or false based on the device/emulator internet connection availability
         assertTrue(applicationUtils.isInternetAvailable())
     }
 }
