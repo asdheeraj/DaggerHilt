@@ -49,6 +49,7 @@ class BlogRepoImplTest {
     @Test
     fun getBlogs_failure_exceptionThrown() {
         testCoroutineRule.runBlockingTest {
+            `when`(blogDao.getBlogs()).thenReturn(emptyList())
             try {
                 blogRepo.getBlogs(false)
             } catch (e: Exception) {
