@@ -7,7 +7,7 @@ import javax.inject.Inject
 class MainFragmentFactory
 @Inject
 constructor(
-    private val someString: String
+     private val someString: String
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
