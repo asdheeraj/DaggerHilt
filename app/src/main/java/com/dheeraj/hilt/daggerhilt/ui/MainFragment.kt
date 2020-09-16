@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dheeraj.hilt.daggerhilt.BuildConfig
 import com.dheeraj.hilt.daggerhilt.R
 import com.dheeraj.hilt.daggerhilt.model.Blog
 import com.dheeraj.hilt.daggerhilt.ui.adapter.BlogAdapter
@@ -29,11 +30,11 @@ constructor(
 
     private val mainViewModel: MainViewModel by viewModels()
 
-    private val blogAdapter: BlogAdapter = BlogAdapter(mockBlogData())
+    private val blogAdapter: BlogAdapter = BlogAdapter(getInitialData())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG,  "Constructor Injection Working! $someString")
+        Log.d(TAG, "Constructor Injection Working! $someString")
         initViews()
         initObservers()
     }
@@ -48,26 +49,28 @@ constructor(
         }
     }
 
+    private fun getInitialData(): ArrayList<Blog> = if(BuildConfig.DEBUG) mockBlogData() else arrayListOf()
 
     private fun initObservers() {
-        mainViewModel.getBlogs(applicationUtils.isInternetAvailable()).observe(viewLifecycleOwner, Observer { resource ->
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    progressBar.visibility = View.GONE
-                    setUpUI(resource.data as ArrayList<Blog>)
+        mainViewModel.getBlogs(applicationUtils.isInternetAvailable())
+            .observe(viewLifecycleOwner, Observer { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        progressBar.visibility = View.GONE
+                        setUpUI(resource.data as ArrayList<Blog>)
+                    }
+
+                    Status.LOADING -> {
+                        progressBar.visibility = View.VISIBLE
+                    }
+
+                    Status.ERROR -> {
+                        Toast.makeText(activity, resource.message, Toast.LENGTH_LONG).show()
+                        progressBar.visibility = View.GONE
+                    }
                 }
 
-                Status.LOADING -> {
-                    progressBar.visibility = View.VISIBLE
-                }
-
-                Status.ERROR -> {
-                    Toast.makeText(activity, resource.message, Toast.LENGTH_LONG).show()
-                    progressBar.visibility = View.GONE
-                }
-            }
-
-        })
+            })
     }
 
     private fun setUpUI(blogs: ArrayList<Blog>) {
