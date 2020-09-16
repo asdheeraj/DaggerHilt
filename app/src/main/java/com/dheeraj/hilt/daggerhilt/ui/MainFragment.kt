@@ -1,9 +1,5 @@
 package com.dheeraj.hilt.daggerhilt.ui
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,11 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dheeraj.hilt.daggerhilt.R
 import com.dheeraj.hilt.daggerhilt.model.Blog
 import com.dheeraj.hilt.daggerhilt.ui.adapter.BlogAdapter
+import com.dheeraj.hilt.daggerhilt.util.ApplicationUtils
 import com.dheeraj.hilt.daggerhilt.util.Status
 import com.dheeraj.hilt.daggerhilt.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
-
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -41,6 +38,9 @@ constructor(
         initObservers()
     }
 
+    @Inject
+    lateinit var applicationUtils: ApplicationUtils
+
     private fun initViews() {
         with(rv_blogs) {
             layoutManager = LinearLayoutManager(activity)
@@ -50,7 +50,7 @@ constructor(
 
 
     private fun initObservers() {
-        mainViewModel.getBlogs(isInternetAvailable(activity)).observe(viewLifecycleOwner, Observer { resource ->
+        mainViewModel.getBlogs(applicationUtils.isInternetAvailable()).observe(viewLifecycleOwner, Observer { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     progressBar.visibility = View.GONE
@@ -68,36 +68,6 @@ constructor(
             }
 
         })
-    }
-
-    private fun isInternetAvailable(context: Context?): Boolean {
-        var result = false
-        val connectivityManager =
-            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw =
-                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-            result = when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
-                    result = when (type) {
-                        ConnectivityManager.TYPE_WIFI -> true
-                        ConnectivityManager.TYPE_MOBILE -> true
-                        ConnectivityManager.TYPE_ETHERNET -> true
-                        else -> false
-                    }
-
-                }
-            }
-        }
-        return result
     }
 
     fun setUpUI(blogs: ArrayList<Blog>) {
