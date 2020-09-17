@@ -1,22 +1,16 @@
 package com.dheeraj.hilt.daggerhilt.ui
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.dheeraj.hilt.daggerhilt.R
-import com.dheeraj.hilt.daggerhilt.model.Blog
-import com.dheeraj.hilt.daggerhilt.ui.adapter.BlogAdapter
+import com.dheeraj.hilt.daggerhilt.ui.adapter.BlogListAdapter
 import com.dheeraj.hilt.daggerhilt.util.launchFragmentInHiltContainer
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
-import dagger.hilt.android.scopes.FragmentScoped
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -69,7 +63,7 @@ class MainActivityTest {
         val fragmentScenario = launchFragmentInHiltContainer<MainFragment>(
             factory = fragmentFactory
         )
-        onView(withId(R.id.rv_blogs)).perform(actionOnItemAtPosition<BlogAdapter.BlogViewHolder>(3, click()))
+        onView(withId(R.id.rv_blogs)).perform(actionOnItemAtPosition<BlogListAdapter.BlogListViewHolder>(3, click()))
     }
 
 }
